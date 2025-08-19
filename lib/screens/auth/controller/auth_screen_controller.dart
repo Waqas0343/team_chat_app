@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
-
-import '../../services/auth_service.dart';
-import '../home_screen.dart';
+import '../../../services/auth_service.dart';
+import '../../home/home_screen.dart';
 
 class AuthScreenController extends GetxController {
   final AuthService _authService = AuthService();

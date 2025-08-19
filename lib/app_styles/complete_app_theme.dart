@@ -45,7 +45,7 @@ class AppThemeInfo {
         elevation: 0,
       ),
       appBarTheme:  AppBarTheme(
-        backgroundColor: Colors.transparent,
+        backgroundColor: MyColors.primaryColor,
         centerTitle: true,
         elevation: 0,
         titleTextStyle: TextStyle(
@@ -70,7 +70,7 @@ class AppThemeInfo {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: MyColors.lightBlue,
+          foregroundColor: MyColors.blueAccentColor,
           padding:  EdgeInsets.symmetric(
             horizontal: 8.0,
           ),
@@ -80,18 +80,18 @@ class AppThemeInfo {
         ),
       ),
       floatingActionButtonTheme:  FloatingActionButtonThemeData(
-        backgroundColor: MyColors.accentColor,
+        backgroundColor: MyColors.blueAccentColor,
         elevation: 2,
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: MyColors.lightBlue,
+          foregroundColor: MyColors.blueAccentColor,
           padding:  EdgeInsets.symmetric(
             horizontal: 8.0,
           ),
-          side:  BorderSide(color: MyColors.lightBlue),
+          side:  BorderSide(color: MyColors.blueAccentColor),
           shape: RoundedRectangleBorder(
-            side:  BorderSide(color: MyColors.lightBlue),
+            side:  BorderSide(color: MyColors.blueAccentColor),
             borderRadius: BorderRadius.circular(6),
           ),
         ),
@@ -168,7 +168,7 @@ class AppThemeInfo {
       primaryColor: primaryColor,
       colorScheme: ColorScheme.fromSwatch(
         primarySwatch: primaryColor,
-        accentColor: MyColors.accentColor,
+        accentColor: MyColors.blueAccentColor,
         backgroundColor: Colors.white,
       ),
     );

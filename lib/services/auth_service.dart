@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:team_chat_app/app_styles/helper/app_debug_pointer.dart';
 import '../models/user_model.dart';
 
 class AuthService {
@@ -13,7 +14,7 @@ class AuthService {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
-        print('Google Sign-In cancelled by user');
+        Debug.log('Google Sign-In cancelled by user');
         return null;
       }
 
@@ -25,12 +26,12 @@ class AuthService {
 
       final UserCredential userCredential = await _auth.signInWithCredential(credential);
       final User? user = userCredential.user;
-
       if (user != null) {
         final fcmToken = await FirebaseMessaging.instance.getToken();
         await _firestore.collection('users').doc(user.uid).set({
           'email': user.email,
           'displayName': user.displayName,
+          'photoUrl': user.photoURL,
           'fcmToken': fcmToken,
           'lastSignIn': FieldValue.serverTimestamp(),
         }, SetOptions(merge: true));
@@ -39,12 +40,13 @@ class AuthService {
           id: user.uid,
           email: user.email!,
           displayName: user.displayName ?? 'User',
+          photoUrl: user.photoURL,
           fcmToken: fcmToken,
         );
       }
       return null;
     } catch (e) {
-      print('Google Sign-In error: $e');
+      Debug.log('Google Sign-In error: $e');
       return null;
     }
   }
@@ -53,9 +55,9 @@ class AuthService {
     try {
       await _googleSignIn.signOut();
       await _auth.signOut();
-      print('User signed out successfully');
+      Debug.log('User signed out successfully');
     } catch (e) {
-      print('Error during sign-out: $e');
+      Debug.log('Error during sign-out: $e');
     }
   }
 

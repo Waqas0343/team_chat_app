@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:team_chat_app/app_styles/app_spacing.dart';
 import '../../app_styles/app_constant_file/app_images.dart';
 import 'controller/splash_controller.dart';
@@ -21,7 +22,29 @@ class Splash extends StatelessWidget {
               children: [
                 Image.asset(
                   MyImages.logo,
-                  height: MediaQuery.of(context).size.height * 0.25,
+                  height: MediaQuery.of(context).size.height * 0.15,
+                ),
+                widgetSpacerVertically(),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Nex", style: GoogleFonts.aDLaMDisplay(
+                      textStyle: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFf16915),
+                      ),
+                    ),),
+                    Text("Chat", style: GoogleFonts.aDLaMDisplay(
+                      textStyle: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF023a84),
+
+                      ),
+                    ),),
+                  ],
                 ),
                 widgetSpacerVertically(),
                 if (controller.connectivityError.value)

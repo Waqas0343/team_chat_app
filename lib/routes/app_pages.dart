@@ -1,5 +1,9 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
-import '../screens/auth_screen.dart';
+import '../screens/auth/auth_screen.dart';
+import '../screens/create_group_screen.dart';
+import '../screens/groups/create_new_group_screen.dart';
+import '../screens/groups/group_chats_screen.dart';
+import '../screens/home/home_screen.dart';
 import '../screens/splash/splash_screen.dart';
 import 'app_routes.dart';
 
@@ -12,6 +16,19 @@ class AppPages {
     GetPage(
       name: AppRoutes.loginWithMail,
       page: () =>  AuthScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.homeScreen,
+      page: () =>  HomeScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.createNewGroupScreen,
+      page: () =>  CreateNewGroupScreen(),
+    ),
+
+    GetPage(
+      name: AppRoutes.groupChatScreen,
+      page: () =>  GroupChatsScreen(),
     ),
 
   ];
