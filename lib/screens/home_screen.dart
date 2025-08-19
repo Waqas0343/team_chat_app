@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import 'auth_screen.dart';
 import 'create_group_screen.dart';
 import 'group_chat_screen.dart';
 import '../widgets/group_tile.dart';
@@ -68,27 +69,3 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class AuthScreen extends StatelessWidget {
-  final AuthService _authService = AuthService();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Login')),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () async {
-            final user = await _authService.signInWithGoogle();
-            if (user != null) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
-              );
-            }
-          },
-          child: Text('Sign in with Google'),
-        ),
-      ),
-    );
-  }
-}
