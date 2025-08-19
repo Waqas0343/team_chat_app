@@ -1,0 +1,56 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "teamchatapp-fe981",
+          "appId": "1:968434888103:android:c6580731661d1310ce9a82",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "teamchatapp-fe981",
+          "appId": "1:968434888103:ios:9167d812c0bf47d2ce9a82",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "teamchatapp-fe981",
+          "appId": "1:968434888103:ios:9167d812c0bf47d2ce9a82",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "teamchatapp-fe981",
+          "configurations": {
+            "android": "1:968434888103:android:c6580731661d1310ce9a82",
+            "ios": "1:968434888103:ios:9167d812c0bf47d2ce9a82",
+            "macos": "1:968434888103:ios:9167d812c0bf47d2ce9a82",
+            "web": "1:968434888103:web:7628d91d72e12b95ce9a82",
+            "windows": "1:968434888103:web:73c03744017cfca5ce9a82"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": []
+    }
+  ]
+
+}
