@@ -4,5 +4,6 @@ class AppRoutes {
   static  String homeScreen = '/homeScreen';
   static  String createNewGroupScreen = '/createNewGroupScreen';
   static  String groupChatScreen = '/groupChatScreen';
+  static  String chatScreen = '/chatScreen';
 
 }

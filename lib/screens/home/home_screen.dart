@@ -152,7 +152,8 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.toNamed(AppRoutes.createNewGroupScreen);
+          // Get.toNamed(AppRoutes.createNewGroupScreen);
+          Get.toNamed(AppRoutes.chatScreen);
         },
         backgroundColor: MyColors.primaryColor,
         shape: RoundedRectangleBorder(
