@@ -45,5 +45,15 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+	<!-- 🔹 Added for chat app functionality -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Allow microphone access for voice messages and calls</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allow access to photos for image sharing</string>
 </dict>
 </plist>

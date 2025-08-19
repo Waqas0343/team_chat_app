@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "968434888103",
+    "project_id": "teamchatapp-fe981",
+    "storage_bucket": "teamchatapp-fe981.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968434888103:android:c6580731661d1310ce9a82",
+        "android_client_info": {
+          "package_name": "com.example.team_chat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "968434888103-9i3u00oeqnfdgb19hs1sjegrodr1n43k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCobM138NxkJ3SLzdrbs3mwal0qzPPfZUQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "968434888103-9i3u00oeqnfdgb19hs1sjegrodr1n43k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "968434888103-tmus86m96t5rjs43aakbm1j27lppdo4t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.teamChatApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
