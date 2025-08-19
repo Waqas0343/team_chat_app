@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:team_chat_app/app_styles/helper/app_debug_pointer.dart';
 import 'package:team_chat_app/routes/app_pages.dart';
 import 'package:team_chat_app/routes/app_routes.dart';
+import 'package:team_chat_app/services/services.dart';
 import 'app_styles/complete_app_theme.dart';
 import 'firebase_options.dart';
 import 'services/notification_service.dart';
@@ -16,6 +17,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Services().initServices();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
