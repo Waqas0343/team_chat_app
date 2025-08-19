@@ -4,10 +4,10 @@ import 'package:team_chat_app/app_styles/app_constant_file/app_colors.dart';
 import 'controller/auth_screen_controller.dart';
 
 class AuthScreen extends StatelessWidget {
-  AuthScreen({super.key});
-  final AuthScreenController controller = Get.put(AuthScreenController());
+  const AuthScreen({super.key});
   @override
   Widget build(BuildContext context) {
+    final AuthScreenController controller = Get.put(AuthScreenController());
     return Scaffold(
       backgroundColor: MyColors.primaryColor,
       body: SafeArea(

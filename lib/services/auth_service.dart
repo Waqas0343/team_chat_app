@@ -60,6 +60,5 @@ class AuthService {
       Debug.log('Error during sign-out: $e');
     }
   }
-
   User? getCurrentUser() => _auth.currentUser;
 }

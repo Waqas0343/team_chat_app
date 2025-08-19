@@ -6,7 +6,6 @@ import 'package:team_chat_app/routes/app_routes.dart';
 import 'package:team_chat_app/widgets/custom_card_widget.dart';
 import '../../app_styles/app_constant_file/app_colors.dart';
 import '../../app_styles/app_constant_file/app_images.dart';
-import '../../services/auth_service.dart';
 import 'controller/home_controller.dart';
 import '../../widgets/group_tile.dart';
 
@@ -14,7 +13,6 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    final AuthService authService = AuthService();
     final HomeController controller = Get.put(HomeController());
     return Scaffold(
       resizeToAvoidBottomInset: false,
