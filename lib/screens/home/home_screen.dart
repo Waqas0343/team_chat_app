@@ -145,18 +145,33 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Chats'),
-          BottomNavigationBarItem(icon: Icon(Icons.group), label: 'Groups'),
-          BottomNavigationBarItem(icon: Icon(Icons.call), label: 'Calls'),
-        ],
-        onTap: (index) {
-          if (index == 1) {
-           Get.toNamed(AppRoutes.createNewGroupScreen);
-          } if (index == 2) {
-            Get.toNamed(AppRoutes.callsScreen);
-          }
-        },
+        type: BottomNavigationBarType.fixed,
+        currentIndex: controller.selectedIndex.value,
+        selectedItemColor: MyColors.primaryColor,
+        unselectedItemColor: Colors.grey,
+        onTap: controller.changeTab,
+        items: List.generate(controller.icons.length, (index) {
+          return BottomNavigationBarItem(
+            icon: Column(
+              children: [
+                Container(
+                  height: 3,
+                  width: 30,
+                  margin: EdgeInsets.only(bottom: 4),
+                  decoration: BoxDecoration(
+                    color:
+                    controller.selectedIndex.value == index
+                        ? MyColors.primaryColor
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                Icon(controller.icons[index]),
+              ],
+            ),
+            label: controller.labels[index],
+          );
+        }),
       ),
     );
   }
