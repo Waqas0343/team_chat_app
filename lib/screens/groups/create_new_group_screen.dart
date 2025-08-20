@@ -84,14 +84,14 @@ class CreateNewGroupScreen extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        backgroundColor: MyColors.primaryColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Icon(Icons.arrow_forward, color: Colors.white),
-      )
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: (){},
+      //   backgroundColor: MyColors.primaryColor,
+      //   shape: RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.circular(16),
+      //   ),
+      //   child: Icon(Icons.arrow_forward, color: Colors.white),
+      // )
 
     );
   }

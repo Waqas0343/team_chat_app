@@ -14,7 +14,6 @@ class CreateGroupController extends GetxController {
   var usersList = <UserModel>[].obs;
   var filteredList = <UserModel>[].obs;
   final RxBool isLoading = RxBool(false);
-  var groupName = ''.obs;
 
   @override
   void onInit() {
