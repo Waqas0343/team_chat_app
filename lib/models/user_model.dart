@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   final String id;
   final String email;
@@ -16,15 +18,20 @@ class UserModel {
   });
 
   factory UserModel.fromMap(Map<String, dynamic> data, String id) {
+    DateTime? parseLastSignIn(dynamic value) {
+      if (value == null) return null;
+      if (value is Timestamp) return value.toDate();
+      if (value is String) return DateTime.tryParse(value);
+      return null;
+    }
+
     return UserModel(
       id: id,
-      email: data['email'],
-      displayName: data['displayName'],
-      fcmToken: data['fcmToken'],
-      photoUrl: data['photoUrl'],
-      lastSignIn: data['lastSignIn'] != null
-          ? DateTime.tryParse(data['lastSignIn'])
-          : null,
+      email: data['email']?.toString() ?? '',
+      displayName: data['displayName']?.toString() ?? '',
+      fcmToken: data['fcmToken']?.toString(),
+      photoUrl: data['photoUrl']?.toString(),
+      lastSignIn: parseLastSignIn(data['lastSignIn']),
     );
   }
 
@@ -34,7 +41,7 @@ class UserModel {
       'displayName': displayName,
       'fcmToken': fcmToken,
       'photoUrl': photoUrl,
-      'lastSignIn': lastSignIn,
+      'lastSignIn': lastSignIn != null ? Timestamp.fromDate(lastSignIn!) : null,
     };
   }
 }

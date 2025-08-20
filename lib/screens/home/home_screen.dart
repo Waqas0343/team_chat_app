@@ -131,7 +131,6 @@ class HomeScreen extends StatelessWidget {
               if (controller.filteredChats.isEmpty) {
                 return Center(child: Text('No chats found'));
               }
-
               return ListView.builder(
                 itemCount: controller.filteredChats.length,
                 itemBuilder: (ctx, index) {
