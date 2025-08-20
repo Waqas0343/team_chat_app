@@ -95,15 +95,47 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
+          Padding(
+            padding:  EdgeInsets.only(left: 12.0, right: 12, top: 12),
+            child: TextFormField(
+              decoration: InputDecoration(
+                hintText: 'Search Users',
+                prefixIcon: Icon(Icons.search),
+                suffixIcon: Obx(() => (controller.filteredChats.length != controller.chats.length)
+                    ? IconButton(
+                  icon: Icon(Icons.clear),
+                  onPressed: () {
+                    controller.searchChats('');
+                  },
+                )
+                    : SizedBox.shrink()),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide(color: MyColors.primaryColor),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide(color: MyColors.primaryColor),
+                ),
+              ),
+              onChanged: controller.searchChats,
+            ),
+          ),
+
           Expanded(
             child: Obx(() {
-              if (controller.chats.isEmpty) {
+              if (controller.isLoading.value) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              if (controller.filteredChats.isEmpty) {
                 return Center(child: Text('No chats found'));
               }
+
               return ListView.builder(
-                itemCount: controller.chats.length,
+                itemCount: controller.filteredChats.length,
                 itemBuilder: (ctx, index) {
-                  final chat = controller.chats[index];
+                  final chat = controller.filteredChats[index];
                   return ListTile(
                     leading: ClipOval(
                       child: chat['photoUrl'] != ""
@@ -117,7 +149,22 @@ class HomeScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    subtitle: Text(chat['email']),
+                    subtitle: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            chat['lastMessage'] ?? '',
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if (chat['lastMessageTime'] != null)
+                          Text(
+                            TimeOfDay.fromDateTime(chat['lastMessageTime']).format(Get.context!),
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
+                      ],
+                    ),
                     onTap: () {
                       Get.toNamed(AppRoutes.chatScreen, arguments: {
                         "chatId": chat["chatId"],

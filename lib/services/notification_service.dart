@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:team_chat_app/app_styles/helper/app_debug_pointer.dart';
 
 class NotificationService {
   final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -23,7 +24,7 @@ class NotificationService {
     await _notificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) async {
-        print('Notification tapped: ${response.payload}');
+        Debug.log('Notification tapped: ${response.payload}');
       },
     );
 
@@ -39,12 +40,12 @@ class NotificationService {
     );
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Foreground message: ${message.notification?.title}');
-      _showNotification(message);
+      Debug.log('Foreground message: ${message.notification?.title}');
+      showNotification(message);
     });
   }
 
-  Future<void> _showNotification(RemoteMessage message) async {
+  Future<void> showNotification(RemoteMessage message) async {
     const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
       'chat_channel',
       'Chat Notifications',

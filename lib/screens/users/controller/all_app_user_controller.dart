@@ -49,13 +49,27 @@ class AllAppUserController extends GetxController {
           .toList();
     }
   }
+  Future<String> getOrCreateChat(String otherUserId) async {
+    final currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    final chatId = generateChatId(currentUserId, otherUserId);
+    final chatDoc = _firestore.collection('chats').doc(chatId);
 
-  String generateChatId(String currentUserId, String selectedUserId) {
-    if (currentUserId.compareTo(selectedUserId) < 0) {
-      return "${currentUserId}_$selectedUserId";
-    } else {
-      return "${selectedUserId}_$currentUserId";
+    try {
+      await chatDoc.set({
+        'participants': [currentUserId, otherUserId],
+        'createdAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
+      return chatId;
+    } catch (e) {
+      Debug.log("Error creating or fetching chat: $e");
+      rethrow;
     }
   }
-}
 
+  String generateChatId(String currentUserId, String selectedUserId) {
+    return currentUserId.compareTo(selectedUserId) < 0
+        ? "${currentUserId}_$selectedUserId"
+        : "${selectedUserId}_$currentUserId";
+  }
+}

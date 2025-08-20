@@ -1,30 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-
-import '../../../app_styles/app_constant_file/app_constant.dart';
 import '../../../routes/app_routes.dart';
 
 class HomeController extends GetxController {
-  final DateFormat dateFormat = DateFormat(Keys.dateFormat);
-  final DateFormat timeFormat = DateFormat(Keys.timeFormat);
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  var chats = [].obs; // List of chats with user info
-  var selectedIndex = 0.obs;
+  var chats = <Map<String, dynamic>>[].obs;
+  var filteredChats = <Map<String, dynamic>>[].obs;
+  final RxInt selectedIndex = 0.obs;
+  final RxBool isLoading = true.obs;
 
   @override
   void onInit() {
     super.onInit();
-    fetchUserChats();
+    getAllUserChats();
   }
 
-  void fetchUserChats() {
+  void getAllUserChats() {
     String currentUserId = auth.currentUser!.uid;
+    isLoading.value = true;
+
     _firestore
         .collection('chats')
         .where('participants', arrayContains: currentUserId)
@@ -40,41 +38,62 @@ class HomeController extends GetxController {
         await _firestore.collection('users').doc(otherUserId).get();
 
         if (userDoc.exists) {
+          // Get last message
+          QuerySnapshot lastMsgSnapshot = await _firestore
+              .collection('chats')
+              .doc(doc.id)
+              .collection('messages')
+              .orderBy('timestamp', descending: true)
+              .limit(1)
+              .get();
+
+          String lastMessage = '';
+          DateTime? lastMsgTime;
+
+          if (lastMsgSnapshot.docs.isNotEmpty) {
+            var msgData = lastMsgSnapshot.docs.first.data() as Map<String, dynamic>;
+            lastMessage = msgData['content'];
+            lastMsgTime = (msgData['timestamp'] as Timestamp).toDate();
+          }
+
           chatList.add({
             "chatId": doc.id,
             "userId": otherUserId,
             "displayName": userDoc['displayName'],
             "email": userDoc['email'],
             "photoUrl": userDoc['photoUrl'] ?? "",
+            "lastMessage": lastMessage,
+            "lastMessageTime": lastMsgTime,
           });
         }
       }
 
       chats.value = chatList;
+      filteredChats.value = chatList;
+      isLoading.value = false;
     });
   }
-  final List<String> pageRoutes = [
-    AppRoutes.homeScreen,
-    AppRoutes.createNewGroupScreen,
-    AppRoutes.callsScreen,
-    AppRoutes.allAppUser,
-  ];
 
-  final List<IconData> icons = [
-    Icons.message,
-    Icons.group,
-    Icons.call,
-    Icons.supervisor_account_rounded,
-  ];
-
-  final List<String> labels = [
-    'Chats',
-    'Groups',
-    'Calls',
-    'Users',
-  ];
+  void searchChats(String query) {
+    if (query.isEmpty) {
+      filteredChats.value = chats;
+    } else {
+      filteredChats.value = chats
+          .where((chat) =>
+      chat['displayName'].toLowerCase().contains(query.toLowerCase()) ||
+          chat['email'].toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
+  }
+  final List<IconData> icons = [ Icons.message, Icons.group, Icons.call, Icons.supervisor_account_rounded, ]; final List<String> labels = [ 'Chats', 'Groups', 'Calls', 'Users', ];
   void changeTab(int index) {
     selectedIndex.value = index;
-    Get.toNamed(pageRoutes[index]);
+    Get.toNamed([
+      AppRoutes.homeScreen,
+      AppRoutes.createNewGroupScreen,
+      AppRoutes.callsScreen,
+      AppRoutes.allAppUser,
+    ][index]);
   }
 }
+

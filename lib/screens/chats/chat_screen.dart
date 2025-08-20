@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../widgets/chat_input.dart';
 import '../../widgets/message_bubble.dart';
 import 'controller/chat_screen_controller.dart';
@@ -8,10 +7,10 @@ import 'controller/chat_screen_controller.dart';
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     final ChatScreenController controller = Get.put(ChatScreenController());
+
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
@@ -19,8 +18,11 @@ class ChatScreen extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 20,
-              backgroundImage: NetworkImage(controller.photoUrl.toString()),
+              backgroundImage: controller.photoUrl != null
+                  ? NetworkImage(controller.photoUrl!)
+                  : null,
               backgroundColor: Colors.grey[300],
+              child: controller.photoUrl == null ? Icon(Icons.person) : null,
             ),
             SizedBox(width: 8),
             Column(
@@ -28,7 +30,7 @@ class ChatScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  controller.displayName.toString(),
+                  controller.displayName ?? "User",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -57,13 +59,19 @@ class ChatScreen extends StatelessWidget {
           ),
         ],
       ),
-        body: Column(
+      body: Column(
         children: [
           Expanded(
             child: Obx(() {
-              if (controller.messages.isEmpty) {
+              if (controller.isChatLoading.value) {
                 return Center(child: CircularProgressIndicator());
               }
+
+              if (controller.messages.isEmpty) {
+                return Center(
+                    child: Text("No messages yet. Start the conversation!"));
+              }
+
               return ListView.builder(
                 reverse: true,
                 itemCount: controller.messages.length,

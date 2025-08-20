@@ -85,10 +85,8 @@ class AllAppUser extends StatelessWidget {
                           ? controller.dateFormat.format(user.lastSignIn!)
                           : "N/A",
                     ),
-                    onTap: () {
-                      final currentUserId = FirebaseAuth.instance.currentUser!.uid;
-                      final chatId =
-                      controller.generateChatId(currentUserId, user.id);
+                    onTap: () async {
+                      final chatId = await controller.getOrCreateChat(user.id);
                       Get.toNamed(AppRoutes.chatScreen, arguments: {
                         "chatId": chatId,
                         "userId": user.id,
@@ -96,6 +94,7 @@ class AllAppUser extends StatelessWidget {
                         "photoUrl": user.photoUrl,
                       });
                     },
+
                   );
                 },
               );
