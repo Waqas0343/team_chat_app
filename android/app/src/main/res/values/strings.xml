@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">aa_recruitment_agency</string>
+    <string name="google_app_id">624812731031-01t4fcush6p5etumsls7235sh862tc52.apps.googleusercontent.com</string>
+    <string name="facebook_app_id">989215079831674</string>
+    <string name="facebook_client_token">53b08cad44f64f8f5975201a101a32f3</string>
+    <string name="fb_login_protocol_scheme">fb989215079831674</string>
+</resources>
