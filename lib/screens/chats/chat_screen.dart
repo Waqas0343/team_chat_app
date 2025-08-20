@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:team_chat_app/app_styles/app_constant_file/app_images.dart';
 
 import '../../widgets/chat_input.dart';
 import '../../widgets/message_bubble.dart';
@@ -20,7 +19,7 @@ class ChatScreen extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 20,
-              backgroundImage: AssetImage(MyImages.logo),
+              backgroundImage: NetworkImage(controller.photoUrl.toString()),
               backgroundColor: Colors.grey[300],
             ),
             SizedBox(width: 8),
@@ -29,7 +28,7 @@ class ChatScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "Muhammad Waqas",
+                  controller.displayName.toString(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -82,8 +81,8 @@ class ChatScreen extends StatelessWidget {
             onSendMessage: (content, type) {
               if (type == 'text') controller.sendTextMessage(content);
             },
-            onSendImage: controller.uploadImage, // <-- NO parentheses
-            onSendVoice: controller.uploadVoice, // <-- NO parentheses
+            onSendImage: controller.uploadImage,
+            onSendVoice: controller.uploadVoice,
           ),
         ],
       ),

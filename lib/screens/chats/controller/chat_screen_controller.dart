@@ -7,12 +7,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../models/message_model.dart';
 import '../../../services/call_service.dart';
-import '../../../services/chat_service.dart';
 
 class ChatScreenController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage storage = FirebaseStorage.instance;
-  final ChatService chatService = ChatService();
   final RxList<Message> messages = <Message>[].obs;
   String get currentUserId => FirebaseAuth.instance.currentUser!.uid;
 
@@ -27,8 +25,8 @@ class ChatScreenController extends GetxController {
     var args = Get.arguments;
     chatId = args["chatId"];
     receiverId = args["userId"];
-    receiverId = args["displayName"];
-    receiverId = args["photoUrl"];
+    displayName = args["displayName"];
+    photoUrl = args["photoUrl"];
     listenMessages();
   }
 

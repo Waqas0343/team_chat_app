@@ -4,6 +4,7 @@ class UserModel {
   final String displayName;
   final String? fcmToken;
   final String? photoUrl;
+  final DateTime? lastSignIn;
 
   UserModel({
     required this.id,
@@ -11,6 +12,7 @@ class UserModel {
     required this.displayName,
     this.fcmToken,
     this.photoUrl,
+    this.lastSignIn,
   });
 
   factory UserModel.fromMap(Map<String, dynamic> data, String id) {
@@ -20,6 +22,9 @@ class UserModel {
       displayName: data['displayName'],
       fcmToken: data['fcmToken'],
       photoUrl: data['photoUrl'],
+      lastSignIn: data['lastSignIn'] != null
+          ? DateTime.tryParse(data['lastSignIn'])
+          : null,
     );
   }
 
@@ -29,6 +34,7 @@ class UserModel {
       'displayName': displayName,
       'fcmToken': fcmToken,
       'photoUrl': photoUrl,
+      'lastSignIn': lastSignIn,
     };
   }
 }
