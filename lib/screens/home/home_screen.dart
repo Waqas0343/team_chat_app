@@ -71,7 +71,7 @@ class HomeScreen extends StatelessWidget {
                 PopupMenuButton<String>(
                   icon:  Icon(
                     Icons.more_vert_outlined,
-                    color: MyColors.primaryColor,
+                    color: Colors.white,
                     size: 30,
                   ),
                   onSelected: (value) {},
@@ -152,14 +152,14 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Get.toNamed(AppRoutes.createNewGroupScreen);
-          Get.toNamed(AppRoutes.chatScreen);
+          Get.toNamed(AppRoutes.createNewGroupScreen);
+          // Get.toNamed(AppRoutes.chatScreen);
         },
         backgroundColor: MyColors.primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ), // #f16915
-        child: const Icon(
+        child:  Icon(
           Icons.group_add,
           color: Colors.white,
           size: 28,
@@ -174,6 +174,8 @@ class HomeScreen extends StatelessWidget {
         onTap: (index) {
           if (index == 1) {
            Get.toNamed(AppRoutes.createNewGroupScreen);
+          } if (index == 2) {
+            Get.toNamed(AppRoutes.callsScreen, arguments: 'CallID');
           }
         },
       ),

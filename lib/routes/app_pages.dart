@@ -1,7 +1,7 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import '../screens/auth/auth_screen.dart';
+import '../screens/calls/call_screen.dart';
 import '../screens/chats/chat_screen.dart';
-import '../screens/create_group_screen.dart';
 import '../screens/groups/create_new_group_screen.dart';
 import '../screens/groups/group_chats_screen.dart';
 import '../screens/home/home_screen.dart';
@@ -34,6 +34,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.chatScreen,
       page: () =>  ChatScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.callsScreen,
+      page: () =>  CallScreen(),
     ),
 
   ];

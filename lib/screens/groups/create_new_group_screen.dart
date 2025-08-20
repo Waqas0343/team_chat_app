@@ -11,7 +11,6 @@ class CreateNewGroupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CreateGroupController controller = Get.put(CreateGroupController());
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Create Group'),
@@ -20,13 +19,22 @@ class CreateNewGroupScreen extends StatelessWidget {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding:  EdgeInsets.all(16.0),
             child: TextField(
               onChanged: (value) => controller.groupName.value = value,
               decoration: InputDecoration(
-                labelText: 'Group Name',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                hintText: 'Group Name',
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide(
+                    color: MyColors.primaryColor,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide(
+                    color: MyColors.primaryColor,
+                  ),
                 ),
               ),
             )),
