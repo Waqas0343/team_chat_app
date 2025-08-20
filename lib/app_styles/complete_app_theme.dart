@@ -6,20 +6,20 @@ class AppThemeInfo {
   static double get borderRadius => 6.0;
 
   static ThemeData get themeData {
-    var primaryColor =  MaterialColor(0xFF38BD88, {
-      50: Color(0xffe5f9f1),
-      100: Color(0xffb3eed7),
-      200: Color(0xff80e3bd),
-      300: Color(0xff4dd9a3),
-      400: Color(0xff26d08a),
-      500: Color(0xFF38BD88),
-      600: Color(0xff34a678),
-      700: Color(0xff2e8e67),
-      800: Color(0xff297756),
-      900: Color(0xff235f45),
+    var primaryColor = MaterialColor(0xFF023a84, {
+      50: Color(0xffe1e7f2),
+      100: Color(0xffb3c2df),
+      200: Color(0xff8099ca),
+      300: Color(0xff4d71b5),
+      400: Color(0xff2655a5),
+      500: Color(0xFF023a84),
+      600: Color(0xff023578),
+      700: Color(0xff022d68),
+      800: Color(0xff022558),
+      900: Color(0xff011843),
     });
     var baseTheme = ThemeData(
-      useMaterial3: false, // Disabling Material 3
+      useMaterial3: false,
       scaffoldBackgroundColor: Colors.white,
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
