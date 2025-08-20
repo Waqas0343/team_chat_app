@@ -6,5 +6,6 @@ class AppRoutes {
   static  String groupChatScreen = '/groupChatScreen';
   static  String chatScreen = '/chatScreen';
   static  String callsScreen = '/callsScreen';
+  static  String allAppUser = '/allAppUser';
 
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,35 +11,53 @@ import '../../../routes/app_routes.dart';
 class HomeController extends GetxController {
   final DateFormat dateFormat = DateFormat(Keys.dateFormat);
   final DateFormat timeFormat = DateFormat(Keys.timeFormat);
-  var users = <DocumentSnapshot>[].obs;
-  var groups = <DocumentSnapshot>[].obs;
-  RxInt selectedIndex = 0.obs;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
+  var chats = [].obs; // List of chats with user info
+  var selectedIndex = 0.obs;
 
   @override
   void onInit() {
     super.onInit();
-    fetchUsers();
-    fetchGroups();
+    fetchUserChats();
   }
 
-  void fetchUsers() {
-    FirebaseFirestore.instance.collection('users').snapshots().listen((snapshot) {
-      users.value = snapshot.docs;
+  void fetchUserChats() {
+    String currentUserId = auth.currentUser!.uid;
+    _firestore
+        .collection('chats')
+        .where('participants', arrayContains: currentUserId)
+        .snapshots()
+        .listen((snapshot) async {
+      List<Map<String, dynamic>> chatList = [];
+
+      for (var doc in snapshot.docs) {
+        List participants = doc['participants'];
+        String otherUserId =
+        participants.firstWhere((id) => id != currentUserId);
+        var userDoc =
+        await _firestore.collection('users').doc(otherUserId).get();
+
+        if (userDoc.exists) {
+          chatList.add({
+            "chatId": doc.id,
+            "userId": otherUserId,
+            "displayName": userDoc['displayName'],
+            "email": userDoc['email'],
+            "photoUrl": userDoc['photoUrl'] ?? "",
+          });
+        }
+      }
+
+      chats.value = chatList;
     });
   }
-
-  void fetchGroups() {
-    FirebaseFirestore.instance.collection('groups').snapshots().listen((snapshot) {
-      groups.value = snapshot.docs;
-    });
-  }
-
   final List<String> pageRoutes = [
     AppRoutes.homeScreen,
     AppRoutes.createNewGroupScreen,
     AppRoutes.callsScreen,
-    AppRoutes.groupChatScreen,
+    AppRoutes.allAppUser,
   ];
 
   final List<IconData> icons = [

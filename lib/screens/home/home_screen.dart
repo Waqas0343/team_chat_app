@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -98,35 +97,41 @@ class HomeScreen extends StatelessWidget {
         children: [
           Expanded(
             child: Obx(() {
-              if (controller.users.isEmpty) {
-                return Center(child: Text('No users found'));
+              if (controller.chats.isEmpty) {
+                return Center(child: Text('No chats found'));
               }
               return ListView.builder(
-                scrollDirection: Axis.vertical,
-                padding:  EdgeInsets.all(8.0),
-                itemCount: controller.users.length,
+                itemCount: controller.chats.length,
                 itemBuilder: (ctx, index) {
-                  final user = controller.users[index];
+                  final chat = controller.chats[index];
                   return ListTile(
                     leading: ClipOval(
-                      child: Image.network(user['photoUrl']),
+                      child: chat['photoUrl'] != ""
+                          ? Image.network(chat['photoUrl'])
+                          : Icon(Icons.person, size: 40),
                     ),
-                    title: Text(user['displayName'], style: Get.textTheme.titleSmall?.copyWith(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),),
-                    subtitle: Text(user['email']),
-                    trailing: Text(
-                      controller.dateFormat.format(
-                        (user['lastSignIn'] as Timestamp).toDate(),
+                    title: Text(
+                      chat['displayName'],
+                      style: Get.textTheme.titleSmall?.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-
+                    subtitle: Text(chat['email']),
+                    onTap: () {
+                      Get.toNamed(AppRoutes.chatScreen, arguments: {
+                        "chatId": chat["chatId"],
+                        "userId": chat["userId"],
+                        "displayName": chat["displayName"],
+                        "photoUrl": chat["photoUrl"],
+                      });
+                    },
                   );
                 },
               );
             }),
           ),
+
         ],
       ),
       floatingActionButton: FloatingActionButton(

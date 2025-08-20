@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
@@ -9,27 +10,44 @@ import '../../../services/call_service.dart';
 import '../../../services/chat_service.dart';
 
 class ChatScreenController extends GetxController {
-    String? chatId;
-    String? receiverId;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage storage = FirebaseStorage.instance;
   final ChatService chatService = ChatService();
   final RxList<Message> messages = <Message>[].obs;
-
   String get currentUserId => FirebaseAuth.instance.currentUser!.uid;
+
+  String? chatId;
+  String? receiverId;
+  String? displayName;
+  String? photoUrl;
 
   @override
   void onInit() {
     super.onInit();
+    var args = Get.arguments;
+    chatId = args["chatId"];
+    receiverId = args["userId"];
+    receiverId = args["displayName"];
+    receiverId = args["photoUrl"];
     listenMessages();
   }
 
   void listenMessages() {
-    chatService.getMessages(chatId!).listen((msgList) {
-      messages.assignAll(msgList.reversed.toList());
+    if (chatId == null) return;
+    _firestore
+        .collection('chats')
+        .doc(chatId)
+        .collection('messages')
+        .orderBy('timestamp', descending: true)
+        .snapshots()
+        .listen((snapshot) {
+      messages.value = snapshot.docs
+          .map((doc) => Message.fromMap(doc.data(), doc.id))
+          .toList();
     });
   }
 
-  void sendTextMessage(String content) {
+  Future<void>  sendTextMessage(String content) async {
     final message = Message(
       id: '',
       senderId: currentUserId,
@@ -37,10 +55,14 @@ class ChatScreenController extends GetxController {
       type: 'text',
       timestamp: DateTime.now(),
     );
-    chatService.sendMessage(chatId!, message);
+    await _firestore
+        .collection('chats')
+        .doc(chatId)
+        .collection('messages')
+        .add(message.toMap());
   }
 
-  Future<String?> uploadImage() async {
+  Future<String?>  uploadImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -48,7 +70,21 @@ class ChatScreenController extends GetxController {
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
       Reference ref = storage.ref().child('chat_images/$fileName.jpg');
       await ref.putFile(file);
-      return await ref.getDownloadURL();
+      String imageUrl = await ref.getDownloadURL();
+
+      final message = Message(
+        id: '',
+        senderId: currentUserId,
+        content: imageUrl,
+        type: 'image',
+        timestamp: DateTime.now(),
+      );
+
+      await _firestore
+          .collection('chats')
+          .doc(chatId)
+          .collection('messages')
+          .add(message.toMap());
     }
     return null;
   }

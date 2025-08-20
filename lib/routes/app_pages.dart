@@ -6,6 +6,7 @@ import '../screens/groups/create_new_group_screen.dart';
 import '../screens/groups/group_chats_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/splash/splash_screen.dart';
+import '../screens/users/all_app_user.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -39,7 +40,10 @@ class AppPages {
       name: AppRoutes.callsScreen,
       page: () =>  CallScreen(),
     ),
-
+    GetPage(
+      name: AppRoutes.allAppUser,
+      page: () =>  AllAppUser(),
+    ),
   ];
 
 
