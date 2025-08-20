@@ -1,13 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:team_chat_app/app_styles/app_spacing.dart';
 import 'package:team_chat_app/routes/app_routes.dart';
-import 'package:team_chat_app/widgets/custom_card_widget.dart';
 import '../../app_styles/app_constant_file/app_colors.dart';
 import '../../app_styles/app_constant_file/app_images.dart';
 import 'controller/home_controller.dart';
-import '../../widgets/group_tile.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -103,45 +102,25 @@ class HomeScreen extends StatelessWidget {
                 return Center(child: Text('No users found'));
               }
               return ListView.builder(
+                scrollDirection: Axis.vertical,
                 padding:  EdgeInsets.all(8.0),
                 itemCount: controller.users.length,
                 itemBuilder: (ctx, index) {
                   final user = controller.users[index];
-                  return Padding(
-                    padding:  EdgeInsets.all(8.0),
-                    child: CustomCard(
-                      onPressed: (){},
-                      child: ListTile(
-                        leading: ClipOval(
-                          child: Image.network(user['photoUrl']),
-                        ),
-                        title: Text(user['displayName'], style: Get.textTheme.titleSmall?.copyWith(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),),
-                        subtitle: Text(user['email']),
+                  return ListTile(
+                    leading: ClipOval(
+                      child: Image.network(user['photoUrl']),
+                    ),
+                    title: Text(user['displayName'], style: Get.textTheme.titleSmall?.copyWith(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),),
+                    subtitle: Text(user['email']),
+                    trailing: Text(
+                      controller.dateFormat.format(
+                        (user['lastSignIn'] as Timestamp).toDate(),
                       ),
                     ),
-                  );
-                },
-              );
-            }),
-          ),
-          Expanded(
-            child: Obx(() {
-              if (controller.groups.isEmpty) {
-                return Center(child: Text('No groups found'));
-              }
-              return ListView.builder(
-                itemCount: controller.groups.length,
-                itemBuilder: (ctx, index) {
-                  final group = controller.groups[index];
-                  return GroupTile(
-                    groupId: group.id,
-                    groupName: group['name'],
-                    onTap: (){
-                      Get.toNamed(AppRoutes.groupChatScreen, arguments:  group.id);
-                    }
 
                   );
                 },
@@ -175,7 +154,7 @@ class HomeScreen extends StatelessWidget {
           if (index == 1) {
            Get.toNamed(AppRoutes.createNewGroupScreen);
           } if (index == 2) {
-            Get.toNamed(AppRoutes.callsScreen, arguments: 'CallID');
+            Get.toNamed(AppRoutes.callsScreen);
           }
         },
       ),

@@ -3,28 +3,43 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:team_chat_app/app_styles/helper/app_debug_pointer.dart';
 import 'package:team_chat_app/routes/app_routes.dart';
 import '../../../models/user_model.dart';
 
 class AuthScreenController extends GetxController {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
   final RxBool isLoading = RxBool(false);
 
   @override
   void onInit() {
     super.onInit();
-    signInWithGoogle();
+    checkAlreadySignedIn();
   }
+
+
+  Future<void> checkAlreadySignedIn() async {
+    final user = auth.currentUser;
+    if (user != null) {
+      isLoading.value = true;
+
+      // Update FCM token
+      final fcmToken = await FirebaseMessaging.instance.getToken();
+      await firestore.collection('users').doc(user.uid).set({
+        'fcmToken': fcmToken,
+        'lastSignIn': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+      Get.offAllNamed(AppRoutes.homeScreen);
+      isLoading.value = false;
+    }
+  }
+
   Future<UserModel?> signInWithGoogle() async {
     try {
       isLoading.value = true;
-
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       if (googleUser == null) {
-        Debug.log('Google Sign-In cancelled by user');
         isLoading.value = false;
         return null;
       }
@@ -35,12 +50,12 @@ class AuthScreenController extends GetxController {
         accessToken: googleAuth.accessToken,
       );
 
-      final UserCredential userCredential = await _auth.signInWithCredential(credential);
+      final UserCredential userCredential = await auth.signInWithCredential(credential);
       final User? user = userCredential.user;
 
       if (user != null) {
         final fcmToken = await FirebaseMessaging.instance.getToken();
-        await _firestore.collection('users').doc(user.uid).set({
+        await firestore.collection('users').doc(user.uid).set({
           'email': user.email,
           'displayName': user.displayName,
           'photoUrl': user.photoURL,
@@ -56,7 +71,6 @@ class AuthScreenController extends GetxController {
           fcmToken: fcmToken,
         );
 
-        // Navigate to HomeScreen
         Get.offAllNamed(AppRoutes.homeScreen);
         isLoading.value = false;
         return userModel;
@@ -65,21 +79,15 @@ class AuthScreenController extends GetxController {
       isLoading.value = false;
       return null;
     } catch (e) {
-      Debug.log('Google Sign-In error: $e');
       isLoading.value = false;
       return null;
     }
   }
-  Future<void> signOut() async {
-    try {
-      await _googleSignIn.signOut();
-      await _auth.signOut();
-      Debug.log('User signed out successfully');
-      Get.offAllNamed(AppRoutes.loginWithMail);
-    } catch (e) {
-      Debug.log('Error during sign-out: $e');
-    }
-  }
 
-  User? getCurrentUser() => _auth.currentUser;
+  Future<void> signOut() async {
+    await googleSignIn.signOut();
+    await auth.signOut();
+    Get.offAllNamed(AppRoutes.loginWithMail);
+  }
 }
+

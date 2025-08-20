@@ -1,9 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+
+import '../../../app_styles/app_constant_file/app_constant.dart';
 
 class HomeController extends GetxController {
+  final DateFormat dateFormat = DateFormat(Keys.dateFormat);
+  final DateFormat timeFormat = DateFormat(Keys.timeFormat);
   var users = <DocumentSnapshot>[].obs;
   var groups = <DocumentSnapshot>[].obs;
+
 
   @override
   void onInit() {

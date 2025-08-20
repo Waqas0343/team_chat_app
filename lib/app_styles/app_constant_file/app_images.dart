@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 class MyImages{
   static const logo = "assets/images/logo.png";
+  static const loadingGif = "assets/images/loading.gif";
 
 
   static Future<Uint8List> getImageBytes(String imagePath) async {

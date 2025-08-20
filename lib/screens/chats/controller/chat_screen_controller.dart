@@ -7,13 +7,12 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../models/message_model.dart';
 import '../../../services/call_service.dart';
 import '../../../services/chat_service.dart';
-import '../../../services/storage_service.dart';
 
 class ChatScreenController extends GetxController {
     String? chatId;
     String? receiverId;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
-  final ChatService _chatService = ChatService();
+  final FirebaseStorage storage = FirebaseStorage.instance;
+  final ChatService chatService = ChatService();
   final RxList<Message> messages = <Message>[].obs;
 
   String get currentUserId => FirebaseAuth.instance.currentUser!.uid;
@@ -21,12 +20,12 @@ class ChatScreenController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // _listenMessages();
+    listenMessages();
   }
 
-  void _listenMessages() {
-    _chatService.getMessages(chatId!).listen((msgList) {
-      messages.assignAll(msgList.reversed.toList()); // reverse to show latest at bottom
+  void listenMessages() {
+    chatService.getMessages(chatId!).listen((msgList) {
+      messages.assignAll(msgList.reversed.toList());
     });
   }
 
@@ -38,7 +37,7 @@ class ChatScreenController extends GetxController {
       type: 'text',
       timestamp: DateTime.now(),
     );
-    _chatService.sendMessage(chatId!, message);
+    chatService.sendMessage(chatId!, message);
   }
 
   Future<String?> uploadImage() async {
@@ -47,7 +46,7 @@ class ChatScreenController extends GetxController {
     if (pickedFile != null) {
       File file = File(pickedFile.path);
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-      Reference ref = _storage.ref().child('chat_images/$fileName.jpg');
+      Reference ref = storage.ref().child('chat_images/$fileName.jpg');
       await ref.putFile(file);
       return await ref.getDownloadURL();
     }
