@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../app_styles/app_constant_file/app_colors.dart';
+import '../../routes/app_routes.dart';
 import 'controller/create_group_controller.dart';
 
 class CreateNewGroupScreen extends StatelessWidget {
@@ -40,6 +41,9 @@ class CreateNewGroupScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold, fontSize: 16
                         ),
                       ),
+                      onTap: () async {
+                        Get.toNamed(AppRoutes.selectMemberForGroup);
+                      },
                     );
                   }
                   final user = controller.filteredList[index - 1];
@@ -63,15 +67,21 @@ class CreateNewGroupScreen extends StatelessWidget {
                           ? controller.dateFormat.format(user.lastSignIn!)
                           : "N/A",
                     ),
-                    onTap: () {
-                      // Handle single user tap if needed
-                    },
+                      onTap: () async {
+                        final chatId = await controller.getOrCreateChat(user.id);
+                        Get.toNamed(AppRoutes.chatScreen, arguments: {
+                          "chatId": chatId,
+                          "userId": user.id,
+                          "displayName": user.displayName,
+                          "photoUrl": user.photoUrl,
+                        });
+                      },
+
                   );
                 },
               );
             }),
           ),
-
         ],
       ),
       floatingActionButton: FloatingActionButton(

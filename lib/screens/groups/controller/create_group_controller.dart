@@ -1,18 +1,15 @@
-import 'dart:developer' as Debug;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
+import 'package:team_chat_app/app_styles/helper/app_debug_pointer.dart';
 import '../../../app_styles/app_constant_file/app_constant.dart';
 import '../../../models/user_model.dart';
-import '../../../services/chat_service.dart';
 
 class CreateGroupController extends GetxController {
   final DateFormat dateFormat = DateFormat(Keys.dateFormat);
   final DateFormat timeFormat = DateFormat(Keys.timeFormat);
-  final ChatService _chatService = ChatService();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   var usersList = <UserModel>[].obs;
   var filteredList = <UserModel>[].obs;
@@ -42,6 +39,31 @@ class CreateGroupController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  Future<String> getOrCreateChat(String otherUserId) async {
+    final currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    final chatId = generateChatId(currentUserId, otherUserId);
+    final chatDoc = _firestore.collection('chats').doc(chatId);
+
+    try {
+      await chatDoc.set({
+        'participants': [currentUserId, otherUserId],
+        'createdAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
+      return chatId;
+    } catch (e) {
+      Debug.log("Error creating or fetching chat: $e");
+      rethrow;
+    }
+  }
+
+  String generateChatId(String currentUserId, String selectedUserId) {
+    return currentUserId.compareTo(selectedUserId) < 0
+        ? "${currentUserId}_$selectedUserId"
+        : "${selectedUserId}_$currentUserId";
+  }
+
   // void toggleUserSelection(String userId) {
   //   if (selectedUserIds.contains(userId)) {
   //     selectedUserIds.remove(userId);
