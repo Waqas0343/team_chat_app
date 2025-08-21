@@ -1,8 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:team_chat_app/app_styles/app_constant_file/app_colors.dart';
 import '../models/message_model.dart';
 import 'package:intl/intl.dart';
 

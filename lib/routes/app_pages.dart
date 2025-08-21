@@ -2,6 +2,7 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 import '../screens/auth/auth_screen.dart';
 import '../screens/calls/call_screen.dart';
 import '../screens/chats/chat_screen.dart';
+import '../screens/groups/create_group_detail_screen.dart';
 import '../screens/groups/create_new_group_screen.dart';
 import '../screens/groups/group_chats_screen.dart';
 import '../screens/groups/select_member_for_group.dart';
@@ -48,6 +49,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.selectMemberForGroup,
       page: () =>  SelectMemberForGroup(),
+    ),
+    GetPage(
+      name: AppRoutes.createGroupDetailScreen,
+      page: () =>  CreateGroupDetailScreen(),
     ),
   ];
 

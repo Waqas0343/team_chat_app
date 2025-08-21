@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:team_chat_app/routes/app_routes.dart';
 import '../../app_styles/app_constant_file/app_colors.dart';
 import 'controller/select_member_for_group_controller.dart';
 
@@ -61,7 +62,9 @@ class SelectMemberForGroup extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){},
+        onPressed: (){
+          Get.toNamed(AppRoutes.createGroupDetailScreen);
+        },
         backgroundColor: MyColors.primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
