@@ -90,7 +90,7 @@ class HomeController extends GetxController {
     selectedIndex.value = index;
     Get.toNamed([
       AppRoutes.homeScreen,
-      AppRoutes.createNewGroupScreen,
+      AppRoutes.getAllGroupChatsScreen,
       AppRoutes.callsScreen,
       AppRoutes.allAppUser,
     ][index]);

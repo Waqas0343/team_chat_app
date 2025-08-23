@@ -14,6 +14,7 @@ class SelectMemberForGroupController extends GetxController{
   var usersList = <UserModel>[].obs;
   var filteredList = <UserModel>[].obs;
   final RxBool isLoading = RxBool(false);
+  var selectedUsers = <Map<String, String>>[].obs;
 
   @override
   void onInit() {
@@ -36,6 +37,19 @@ class SelectMemberForGroupController extends GetxController{
       Debug.log("Error fetching users: $e");
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  void toggleSelection(UserModel user) {
+    final existing = selectedUsers.indexWhere((element) => element['id'] == user.id);
+    if (existing >= 0) {
+      selectedUsers.removeAt(existing);
+    } else {
+      selectedUsers.add({
+        'id': user.id,
+        'name': user.displayName,
+        'image': user.photoUrl ?? ''
+      });
     }
   }
 }

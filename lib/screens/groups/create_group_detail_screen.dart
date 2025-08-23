@@ -1,7 +1,8 @@
 import 'dart:io';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:team_chat_app/app_styles/app_spacing.dart';
 import 'controller/create_group_detail_controller.dart';
 
 class CreateGroupDetailScreen extends StatelessWidget {
@@ -13,46 +14,56 @@ class CreateGroupDetailScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("New Group"),
+        title: Text("New Group"),
         actions: [
           IconButton(
-            onPressed: () => controller.createGroup(),
-            icon: const Icon(Icons.check),
-          )
+            onPressed: () async {
+              await controller.createGroup();
+            },
+            icon: Icon(Icons.check),
+          ),
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Group Image + Group Name
             Row(
               children: [
-                Obx(() => GestureDetector(
+                GestureDetector(
                   onTap: () {
+                    final groupId = FirebaseFirestore.instance.collection('groups').doc().id;
                     Get.bottomSheet(
                       Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: const BoxDecoration(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(16)),
+                            top: Radius.circular(16),
+                          ),
                         ),
                         child: Wrap(
                           children: [
                             ListTile(
-                              leading: const Icon(Icons.camera_alt),
-                              title: const Text("Take Photo"),
+                              leading: Icon(Icons.camera_alt),
+                              title: Text("Take Photo"),
                               onTap: () {
-                                controller.pickGroupImage(fromCamera: true);
+                                controller.selectAndUploadGroupImage(
+                                  groupId,
+                                  fromCamera: true,
+                                );
                                 Get.back();
                               },
                             ),
                             ListTile(
-                              leading: const Icon(Icons.photo),
-                              title: const Text("Choose from Gallery"),
+                              leading: Icon(Icons.photo),
+                              title: Text("Choose from Gallery"),
                               onTap: () {
-                                controller.pickGroupImage(fromCamera: false);
+                                controller.selectAndUploadGroupImage(
+                                  groupId,
+                                  fromCamera: false,
+                                );
                                 Get.back();
                               },
                             ),
@@ -61,21 +72,26 @@ class CreateGroupDetailScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  child: CircleAvatar(
-                    radius: 35,
-                    backgroundImage: controller.groupImage.value != null
-                        ? FileImage(File(controller.groupImage.value!))
-                        : null,
-                    child: controller.groupImage.value == null
-                        ? const Icon(Icons.camera_alt, size: 30)
-                        : null,
+                  child: Obx(
+                        () {
+                      final image = controller.groupImage.value;
+                      return CircleAvatar(
+                        radius: 35,
+                        backgroundImage: image != null
+                            ? (image.startsWith('http')
+                            ? NetworkImage(image)
+                            : FileImage(File(image)) as ImageProvider)
+                            : null,
+                        child: image == null ? Icon(Icons.camera_alt, size: 30) : null,
+                      );
+                    },
                   ),
-                )),
-                const SizedBox(width: 16),
+                ),
+                widgetSpacerHorizontally(),
                 Expanded(
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      hintText: "Group Subject",
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      hintText: "Group Name",
                       border: UnderlineInputBorder(),
                     ),
                     onChanged: (val) => controller.groupName.value = val,
@@ -83,42 +99,52 @@ class CreateGroupDetailScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text("Participants"),
+            widgetSpacerVertically(),
+            Text(
+              "Participants",
+              style: Get.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            const SizedBox(height: 10),
-            // Selected Members List
-            Obx(() => controller.selectedMembers.isEmpty
-                ? const Text("No members selected")
-                : SizedBox(
-              height: 80,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: controller.selectedMembers.length,
-                itemBuilder: (context, index) {
-                  final member = controller.selectedMembers[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 12),
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundImage: NetworkImage(member['image']!),
+            otherSpacerVertically(),
+            Obx(
+                  () => controller.selectedMembers.isEmpty
+                  ? Text("No members selected")
+                  : Expanded(
+                child: ListView.builder(
+                  itemCount: controller.selectedMembers.length,
+                  itemBuilder: (context, index) {
+                    final member = controller.selectedMembers[index];
+                    return Padding(
+                      padding: EdgeInsets.only(right: 12),
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: member['image']!.isNotEmpty
+                              ? NetworkImage(member['image']!)
+                              : null,
+                          child: member['image']!.isEmpty
+                              ? Icon(Icons.person)
+                              : null,
                         ),
-                        const SizedBox(height: 5),
-                        Text(
+                        title: Text(
                           member['name']!,
-                          style: const TextStyle(fontSize: 12),
+                          style: Get.textTheme.titleSmall?.copyWith(
+                            fontSize: 12,
+                          ),
                           overflow: TextOverflow.ellipsis,
                         ),
-                      ],
-                    ),
-                  );
-                },
+                      ),
+                    );
+                  },
+                ),
               ),
-            )),
+            ),
+            sectionSmallSpacerVertically(),
+            Obx(
+                  () => controller.isLoading.value
+                  ? LinearProgressIndicator()
+                  : SizedBox.shrink(),
+            ),
           ],
         ),
       ),

@@ -3,7 +3,7 @@ class AppRoutes {
   static  String loginWithMail = '/loginWithMail';
   static  String homeScreen = '/homeScreen';
   static  String createNewGroupScreen = '/createNewGroupScreen';
-  static  String groupChatScreen = '/groupChatScreen';
+  static  String getAllGroupChatsScreen = '/getAllGroupChatsScreen';
   static  String chatScreen = '/chatScreen';
   static  String callsScreen = '/callsScreen';
   static  String allAppUser = '/allAppUser';

@@ -30,31 +30,25 @@ class SelectMemberForGroup extends StatelessWidget {
                 itemCount: controller.filteredList.length,
                 itemBuilder: (context, index) {
                   final user = controller.filteredList[index];
-                  return ListTile(
+                   return ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: user.photoUrl != null
-                          ? NetworkImage(user.photoUrl!)
-                          : null,
-                      child: user.photoUrl == null ?  Icon(Icons.person) : null,
+                      backgroundImage: user.photoUrl != null ? NetworkImage(user.photoUrl!) : null,
+                      child: user.photoUrl == null ? Icon(Icons.person) : null,
                     ),
-                    title: Text(
-                      user.displayName,
-                      style: Get.textTheme.titleSmall?.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    title: Text(user.displayName),
                     subtitle: Text(user.email),
-                    trailing: Text(
-                      user.lastSignIn != null
-                          ? controller.dateFormat.format(user.lastSignIn!)
-                          : "N/A",
-                    ),
-                    onTap: () async {
-
+                    trailing: Obx(() {
+                      final isSelected = controller.selectedUsers.any((u) => u['id'] == user.id);
+                      return Icon(
+                        isSelected ? Icons.check_circle : Icons.radio_button_unchecked,
+                        color: isSelected ? Colors.green : null,
+                      );
+                    }),
+                    onTap: () {
+                      controller.toggleSelection(user);
                     },
-
                   );
+
                 },
               );
             }),
@@ -62,15 +56,19 @@ class SelectMemberForGroup extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Get.toNamed(AppRoutes.createGroupDetailScreen);
+        onPressed: () {
+          if(controller.selectedUsers.isEmpty){
+            Get.snackbar("Error", "Select at least one member");
+            return;
+          }
+          Get.toNamed(AppRoutes.createGroupDetailScreen, arguments: {
+            'members': controller.selectedUsers.toList(),
+          });
         },
         backgroundColor: MyColors.primaryColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
         child: Icon(Icons.arrow_forward, color: Colors.white),
       ),
+
     );
   }
 }
