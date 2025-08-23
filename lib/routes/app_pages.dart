@@ -5,6 +5,7 @@ import '../screens/chats/chat_screen.dart';
 import '../screens/groups/create_group_detail_screen.dart';
 import '../screens/groups/create_new_group_screen.dart';
 import '../screens/groups/get_all_group_chats_screen.dart';
+import '../screens/groups/group_person_chats_screen.dart';
 import '../screens/groups/select_member_for_group.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/splash/splash_screen.dart';
@@ -53,6 +54,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.createGroupDetailScreen,
       page: () =>  CreateGroupDetailScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.groupPersonChatsScreen,
+      page: () =>  GroupPersonChatsScreen(),
     ),
   ];
 

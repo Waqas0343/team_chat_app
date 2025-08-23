@@ -57,10 +57,12 @@ class GetAllGroupChatsScreen extends StatelessWidget {
               ),
               subtitle: Text(
                 "${group['members']?.length ?? 0} members",
-                style:  TextStyle(fontSize: 12, color: Colors.grey),
+                style: Get.textTheme.titleSmall?.copyWith(
+                    fontSize: 12, color: Colors.grey
+                ),
               ),
               onTap: () {
-                Get.toNamed("/groupChat", arguments: group);
+                Get.toNamed(AppRoutes.groupPersonChatsScreen, arguments: group);
               },
             );
           },

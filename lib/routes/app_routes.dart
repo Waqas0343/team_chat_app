@@ -9,5 +9,6 @@ class AppRoutes {
   static  String allAppUser = '/allAppUser';
   static  String selectMemberForGroup = '/selectMemberForGroup';
   static  String createGroupDetailScreen = '/createGroupDetailScreen';
+  static  String groupPersonChatsScreen = '/groupPersonChatsScreen';
 
 }
