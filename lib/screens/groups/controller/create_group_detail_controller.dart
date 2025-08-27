@@ -87,6 +87,7 @@ class CreateGroupDetailController extends GetxController {
         'name': groupName.value,
         'members': members,
         'image': groupImage.value ?? '',
+        'createdBy': currentUserId,
         'createdAt': FieldValue.serverTimestamp(),
       });
 
@@ -102,4 +103,5 @@ class CreateGroupDetailController extends GetxController {
       isLoading.value = false;
     }
   }
+
 }

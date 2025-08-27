@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'controller/group_profile_detail_controller.dart';
 
 class GroupProfileDetailScreen extends StatelessWidget {
-   GroupProfileDetailScreen({super.key});
+   const GroupProfileDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +41,19 @@ class GroupProfileDetailScreen extends StatelessWidget {
                 ),
               ),
                SizedBox(height: 8),
-              Text(
-                "Created by: ${controller.createdBy}",
-                style:  TextStyle(color: Colors.grey),
-              ),
+
+              Obx(() => ListTile(
+                leading:  CircleAvatar(
+                  backgroundImage: controller.createdByImage.value.isNotEmpty
+                      ? NetworkImage(controller.createdByImage.value)
+                      : null,
+                  child: controller.createdByImage.value.isEmpty
+                      ? Icon(Icons.person)
+                      : null,
+                ),
+                trailing:  Text("Admin"),
+                title:  Text(controller.createdByName.value),
+              )),
               Divider(),
               ListTile(
                 title: Text(
@@ -70,7 +79,15 @@ class GroupProfileDetailScreen extends StatelessWidget {
                     ),
                     title: Text(member["name"]),
                     subtitle: Text(member["email"]),
-                    trailing: IconButton(onPressed: (){}, icon: Icon(Icons.delete_outlined, color: Colors.red,)),
+                    trailing: controller.createdBy == controller.currentUserId
+                        ? IconButton(
+                      onPressed: () {
+                        controller.deleteMember(member["id"]);
+                      },
+                      icon: Icon(Icons.delete_outlined, color: Colors.red),
+                    )
+                        : null,
+
                   );
                 },
               ),

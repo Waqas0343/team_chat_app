@@ -18,13 +18,16 @@ class GroupPersonChatsScreen extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                Get.toNamed(AppRoutes.groupProfileDetailScreen,  arguments: {
-                  "id": controller.groupId,
-                  "name": controller.groupName,
-                  "image": controller.groupImage,
-                  "createdBy": controller.createdBy,
-                  "members": controller.members,
-                },);
+                Get.toNamed(
+                  AppRoutes.groupProfileDetailScreen,
+                  arguments: {
+                    "id": controller.groupId,
+                    "name": controller.groupName,
+                    "image": controller.groupImage,
+                    "createdBy": controller.createdBy,
+                    "members": controller.members,
+                  },
+                );
               },
               child: CircleAvatar(
                 radius: 20,
