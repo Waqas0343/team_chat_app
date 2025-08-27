@@ -11,6 +11,8 @@ class GroupPersonChatsController extends GetxController {
   late String groupId;
   late String groupName;
   late String groupImage;
+  late List<dynamic> members;
+  late String createdBy;
 
   @override
   void onInit() {
@@ -19,7 +21,9 @@ class GroupPersonChatsController extends GetxController {
     final group = Get.arguments as Map<String, dynamic>;
     groupId = group['id'];
     groupName = group['name'] ?? 'Unknown Group';
-    groupImage = group['imag\e'] ?? '';
+    groupImage = group['image'] ?? '';
+    createdBy = group['createdBy'] ?? '';
+    members = group['members'] ?? [];
 
     listenMessages();
   }

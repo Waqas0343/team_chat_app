@@ -35,7 +35,6 @@ class GetAllGroupChatsScreen extends StatelessWidget {
           itemCount: controller.groups.length,
           itemBuilder: (context, index) {
             final group = controller.groups[index];
-
             return ListTile(
               leading: GestureDetector(
                 onTap: () {

@@ -34,7 +34,7 @@ class GetAllGroupController extends GetxController {
         };
       }).toList();
 
-      isLoading.value = false; // ✅ first snapshot aa gaya
+      isLoading.value = false;
     }, onError: (_) {
       isLoading.value = false;
     });

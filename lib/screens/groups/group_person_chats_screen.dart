@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:team_chat_app/routes/app_routes.dart';
 import '../../widgets/chat_input.dart';
-import '../../widgets/full_image.dart';
 import '../../widgets/message_bubble.dart';
 import 'controller/group_person_chats_controller.dart';
 
@@ -18,11 +18,13 @@ class GroupPersonChatsScreen extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                Get.to(() =>  FullImageNetwork(
-                  imagePath: controller.groupImage,
-                  tag: 'Pharmacy',
-                ),
-                );
+                Get.toNamed(AppRoutes.groupProfileDetailScreen,  arguments: {
+                  "id": controller.groupId,
+                  "name": controller.groupName,
+                  "image": controller.groupImage,
+                  "createdBy": controller.createdBy,
+                  "members": controller.members,
+                },);
               },
               child: CircleAvatar(
                 radius: 20,
@@ -31,11 +33,12 @@ class GroupPersonChatsScreen extends StatelessWidget {
                     : null,
                 backgroundColor: Colors.grey[300],
                 child: controller.groupImage.isEmpty
-                    ?  Icon(Icons.group, color: Colors.white)
+                    ? const Icon(Icons.group, color: Colors.white)
                     : null,
               ),
             ),
-             SizedBox(width: 8),
+
+            SizedBox(width: 8),
             Text(
               controller.groupName,
               style:  TextStyle(
