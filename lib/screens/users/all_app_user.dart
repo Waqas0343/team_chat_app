@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:team_chat_app/routes/app_routes.dart';
 import '../../app_styles/app_constant_file/app_colors.dart';
+import '../../widgets/full_image.dart';
 import 'controller/all_app_user_controller.dart';
 
 class AllAppUser extends StatelessWidget {
@@ -63,13 +64,22 @@ class AllAppUser extends StatelessWidget {
                   final user = controller.filteredList[index];
 
                   return ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: user.photoUrl != null
-                          ? NetworkImage(user.photoUrl!)
-                          : null,
-                      child: user.photoUrl == null
-                          ? const Icon(Icons.person)
-                          : null,
+                    leading: GestureDetector(
+                      onTap: () {
+                        Get.to(() =>  FullImageNetwork(
+                          imagePath:  user.photoUrl.toString(),
+                          tag: 'Pharmacy',
+                        ),
+                        );
+                      },
+                      child: CircleAvatar(
+                        backgroundImage: user.photoUrl != null
+                            ? NetworkImage(user.photoUrl!)
+                            : null,
+                        child: user.photoUrl == null
+                            ? const Icon(Icons.person)
+                            : null,
+                      ),
                     ),
                     title: Text(
                       user.displayName,

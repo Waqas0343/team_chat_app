@@ -5,6 +5,7 @@ import 'package:team_chat_app/app_styles/app_spacing.dart';
 import 'package:team_chat_app/routes/app_routes.dart';
 import '../../app_styles/app_constant_file/app_colors.dart';
 import '../../app_styles/app_constant_file/app_images.dart';
+import '../../widgets/full_image.dart';
 import 'controller/home_controller.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -136,10 +137,19 @@ class HomeScreen extends StatelessWidget {
                 itemBuilder: (ctx, index) {
                   final chat = controller.filteredChats[index];
                   return ListTile(
-                    leading: ClipOval(
-                      child: chat['photoUrl'] != ""
-                          ? Image.network(chat['photoUrl'])
-                          : Icon(Icons.person, size: 40),
+                    leading: GestureDetector(
+                      onTap: () {
+                        Get.to(() =>  FullImageNetwork(
+                          imagePath:  chat['photoUrl'],
+                          tag: 'Pharmacy',
+                        ),
+                        );
+                      },
+                      child: ClipOval(
+                        child: chat['photoUrl'] != ""
+                            ? Image.network(chat['photoUrl'])
+                            : Icon(Icons.person, size: 40),
+                      ),
                     ),
                     title: Text(
                       chat['displayName'],

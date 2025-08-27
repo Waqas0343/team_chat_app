@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../widgets/chat_input.dart';
+import '../../widgets/full_image.dart';
 import '../../widgets/message_bubble.dart';
 import 'controller/group_person_chats_controller.dart';
 
@@ -15,22 +16,29 @@ class GroupPersonChatsScreen extends StatelessWidget {
         titleSpacing: 0,
         title: Row(
           children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundImage: controller.groupImage != null &&
-                  controller.groupImage!.isNotEmpty
-                  ? NetworkImage(controller.groupImage!)
-                  : null,
-              backgroundColor: Colors.grey[300],
-              child: controller.groupImage == null ||
-                  controller.groupImage!.isEmpty
-                  ? const Icon(Icons.group, color: Colors.white)
-                  : null,
+            GestureDetector(
+              onTap: () {
+                Get.to(() =>  FullImageNetwork(
+                  imagePath: controller.groupImage,
+                  tag: 'Pharmacy',
+                ),
+                );
+              },
+              child: CircleAvatar(
+                radius: 20,
+                backgroundImage: controller.groupImage.isNotEmpty
+                    ? NetworkImage(controller.groupImage)
+                    : null,
+                backgroundColor: Colors.grey[300],
+                child: controller.groupImage.isEmpty
+                    ?  Icon(Icons.group, color: Colors.white)
+                    : null,
+              ),
             ),
-            const SizedBox(width: 8),
+             SizedBox(width: 8),
             Text(
               controller.groupName,
-              style: const TextStyle(
+              style:  TextStyle(
                 color: Colors.white,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -40,11 +48,11 @@ class GroupPersonChatsScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.call, color: Colors.white),
+            icon:  Icon(Icons.call, color: Colors.white),
             onPressed: () {},
           ),
           IconButton(
-            icon: const Icon(Icons.videocam, color: Colors.white),
+            icon:  Icon(Icons.videocam, color: Colors.white),
             onPressed: () {},
           ),
         ],
@@ -54,11 +62,11 @@ class GroupPersonChatsScreen extends StatelessWidget {
           Expanded(
             child: Obx(() {
               if (controller.isChatLoading.value) {
-                return const Center(child: CircularProgressIndicator());
+                return  Center(child: CircularProgressIndicator());
               }
 
               if (controller.messages.isEmpty) {
-                return const Center(
+                return  Center(
                   child: Text("No messages yet. Start the conversation!"),
                 );
               }

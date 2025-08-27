@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:team_chat_app/app_styles/app_constant_file/app_images.dart';
 import '../../app_styles/app_constant_file/app_colors.dart';
 import '../../routes/app_routes.dart';
+import '../../widgets/full_image.dart';
 import 'controller/get_all_group_controller.dart';
 
 class GetAllGroupChatsScreen extends StatelessWidget {
@@ -36,16 +37,25 @@ class GetAllGroupChatsScreen extends StatelessWidget {
             final group = controller.groups[index];
 
             return ListTile(
-              leading: ClipOval(
-                child: CachedNetworkImage(
-                  imageUrl: group['image'],
-                  width: 60,
-                  height: 60,
-                  placeholder: (_, __) => const Center(
-                    child: CircularProgressIndicator(strokeWidth: 2),
+              leading: GestureDetector(
+                onTap: () {
+                  Get.to(() =>  FullImageNetwork(
+                    imagePath: group['image'],
+                    tag: 'Pharmacy',
                   ),
-                  errorWidget: (_, __, ___) => Image.asset(MyImages.logo),
-                  fit: BoxFit.cover,
+                  );
+                },
+                child: ClipOval(
+                  child: CachedNetworkImage(
+                    imageUrl: group['image'],
+                    width: 60,
+                    height: 60,
+                    placeholder: (_, __) =>  Center(
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                    errorWidget: (_, __, ___) => Image.asset(MyImages.logo),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               title: Text(

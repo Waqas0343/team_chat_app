@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../widgets/chat_input.dart';
+import '../../widgets/full_image.dart';
 import '../../widgets/message_bubble.dart';
 import 'controller/chat_screen_controller.dart';
 
@@ -16,13 +17,22 @@ class ChatScreen extends StatelessWidget {
         titleSpacing: 0,
         title: Row(
           children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundImage: controller.photoUrl != null
-                  ? NetworkImage(controller.photoUrl!)
-                  : null,
-              backgroundColor: Colors.grey[300],
-              child: controller.photoUrl == null ? Icon(Icons.person) : null,
+            GestureDetector(
+              onTap: () {
+                Get.to(() =>  FullImageNetwork(
+                  imagePath:  controller.photoUrl.toString(),
+                  tag: 'Pharmacy',
+                ),
+                );
+              },
+              child: CircleAvatar(
+                radius: 20,
+                backgroundImage: controller.photoUrl != null
+                    ? NetworkImage(controller.photoUrl!)
+                    : null,
+                backgroundColor: Colors.grey[300],
+                child: controller.photoUrl == null ? Icon(Icons.person) : null,
+              ),
             ),
             SizedBox(width: 8),
             Column(
