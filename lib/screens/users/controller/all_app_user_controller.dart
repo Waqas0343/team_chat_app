@@ -14,9 +14,13 @@ class AllAppUserController extends GetxController {
   var usersList = <UserModel>[].obs;
   var filteredList = <UserModel>[].obs;
   final RxBool isLoading = RxBool(false);
-
+  late String? groupId;
+  late List<dynamic> groupMembers;
   @override
   void onInit() {
+    final args = Get.arguments;
+    groupId = args?["groupId"];
+    groupMembers = List<String>.from(args?["members"] ?? []);
     super.onInit();
     getAllRegisterUsers();
   }
@@ -72,4 +76,30 @@ class AllAppUserController extends GetxController {
         ? "${currentUserId}_$selectedUserId"
         : "${selectedUserId}_$currentUserId";
   }
+
+  Future<void> addUserToGroup(String userId) async {
+    try {
+      if (groupId == null) {
+        return;
+      }
+
+      if (groupMembers.contains(userId)) {
+        Get.snackbar("Already Added", "This user is already a group member.");
+        return;
+      }
+
+      await _firestore.collection("groups").doc(groupId).update({
+        "members": FieldValue.arrayUnion([userId]),
+      });
+
+      groupMembers.add(userId);
+
+      Get.snackbar("Success", "User added to group successfully.");
+    } catch (e) {
+      Debug.log("Error adding user: $e");
+      Get.snackbar("Error", "Failed to add user to group.");
+    }
+  }
+
+
 }

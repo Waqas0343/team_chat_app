@@ -63,22 +63,17 @@ class AllAppUser extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final user = controller.filteredList[index];
 
-                  return ListTile(
+                   return ListTile(
                     leading: GestureDetector(
                       onTap: () {
-                        Get.to(() =>  FullImageNetwork(
-                          imagePath:  user.photoUrl.toString(),
-                          tag: 'Pharmacy',
-                        ),
-                        );
+                        Get.to(() => FullImageNetwork(
+                          imagePath: user.photoUrl.toString(),
+                          tag: 'User Image',
+                        ));
                       },
                       child: CircleAvatar(
-                        backgroundImage: user.photoUrl != null
-                            ? NetworkImage(user.photoUrl!)
-                            : null,
-                        child: user.photoUrl == null
-                            ? const Icon(Icons.person)
-                            : null,
+                        backgroundImage: user.photoUrl != null ? NetworkImage(user.photoUrl!) : null,
+                        child: user.photoUrl == null ? const Icon(Icons.person) : null,
                       ),
                     ),
                     title: Text(
@@ -89,12 +84,20 @@ class AllAppUser extends StatelessWidget {
                       ),
                     ),
                     subtitle: Text(user.email),
-                    trailing: Text(
+                    trailing: controller.groupId != null
+                        ? IconButton(
+                      icon: Icon(Icons.group_add, color: Colors.green),
+                      onPressed: () async {
+                        await controller.addUserToGroup(user.id);
+                      },
+                    )
+                        : Text(
                       user.lastSignIn != null
                           ? controller.dateFormat.format(user.lastSignIn!)
                           : "N/A",
                     ),
-                    onTap: () async {
+                    onTap: controller.groupId == null
+                        ? () async {
                       final chatId = await controller.getOrCreateChat(user.id);
                       Get.toNamed(AppRoutes.chatScreen, arguments: {
                         "chatId": chatId,
@@ -102,9 +105,10 @@ class AllAppUser extends StatelessWidget {
                         "displayName": user.displayName,
                         "photoUrl": user.photoUrl,
                       });
-                    },
-
+                    }
+                        : null,
                   );
+
                 },
               );
             }),

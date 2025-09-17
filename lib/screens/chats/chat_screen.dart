@@ -11,7 +11,6 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ChatScreenController controller = Get.put(ChatScreenController());
-
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
@@ -21,7 +20,7 @@ class ChatScreen extends StatelessWidget {
               onTap: () {
                 Get.to(() =>  FullImageNetwork(
                   imagePath:  controller.photoUrl.toString(),
-                  tag: 'Pharmacy',
+                  tag: 'User Image',
                 ),
                 );
               },
