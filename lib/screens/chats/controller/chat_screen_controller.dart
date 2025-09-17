@@ -5,6 +5,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:team_chat_app/app_styles/helper/app_debug_pointer.dart';
+import 'package:team_chat_app/routes/app_routes.dart';
 import '../../../models/message_model.dart';
 import '../../../services/call_service.dart';
 
@@ -30,8 +32,8 @@ class ChatScreenController extends GetxController {
     displayName = args["displayName"];
     photoUrl = args["photoUrl"];
 
-    await _initChat();   // Ensure chat exists
-    _listenMessages();   // Start listening to messages
+    await _initChat();
+    _listenMessages();
   }
 
   Future<void> _initChat() async {
@@ -50,7 +52,7 @@ class ChatScreenController extends GetxController {
         });
       }
     } catch (e) {
-      print("Error initializing chat: $e");
+      Debug.log("Error initializing chat: $e");
     } finally {
       isChatLoading.value = false;
     }
@@ -135,11 +137,51 @@ class ChatScreenController extends GetxController {
     return null;
   }
 
-  Future<void> startCall() async {
-    if (receiverId == null) return;
-    final callId = await CallService().startCall(receiverId!);
-    if (callId.isNotEmpty) {
-      Get.toNamed('/call', arguments: {'callId': callId});
+  Future<String> startCall({required bool isVideo}) async {
+    if (receiverId == null) return '';
+
+    // 🔹 Ask for required permissions
+    Map<Permission, PermissionStatus> statuses;
+    if (isVideo) {
+      statuses = await [
+        Permission.camera,
+        Permission.microphone,
+      ].request();
+    } else {
+      statuses = await [
+        Permission.microphone,
+      ].request();
     }
+
+    final hasPermission = statuses.values.every((status) => status.isGranted);
+    if (!hasPermission) {
+      Get.snackbar(
+        "Permission Denied",
+        isVideo
+            ? "Camera & Microphone permissions are required for video calls"
+            : "Microphone permission is required for audio calls",
+      );
+      return '';
+    }
+
+    // 🔹 Proceed to call
+    final callId = await CallService().startCall(
+      receiverId!,
+      isVideo: isVideo,
+    );
+
+    if (callId.isNotEmpty) {
+      Get.toNamed(
+        AppRoutes.callsScreen,
+        arguments: {
+          'callId': callId,
+          'isVideo': isVideo,
+        },
+      );
+    }
+    return callId;
   }
+
+
+
 }

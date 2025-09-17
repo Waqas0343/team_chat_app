@@ -46,11 +46,17 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 
-	<!-- 🔹 Added for chat app functionality -->
+	<!-- 🔹 Background support (for notifications etc.) -->
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
+		<string>voip</string>
+		<string>audio</string>
 	</array>
+
+	<!-- 🔹 Permissions for calls & media -->
+	<key>NSCameraUsageDescription</key>
+	<string>Allow camera access for video calls</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Allow microphone access for voice messages and calls</string>
 	<key>NSPhotoLibraryUsageDescription</key>

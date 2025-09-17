@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../widgets/chat_input.dart';
 import '../../widgets/full_image.dart';
 import '../../widgets/message_bubble.dart';
+import '../calls/call_screen.dart';
 import 'controller/chat_screen_controller.dart';
 
 class ChatScreen extends StatelessWidget {
@@ -59,12 +60,36 @@ class ChatScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.call, color: Colors.white),
-            onPressed: controller.startCall,
+            icon: const Icon(Icons.call, color: Colors.white),
+            onPressed: () async {
+              final callId = await controller.startCall(isVideo: false);
+              if (callId.isNotEmpty) {
+                Get.to(
+                      () => CallScreen(
+                    callId: callId,
+                    isVideo: false,
+                    userName: controller.displayName ?? "User",
+                    userPhotoUrl: controller.photoUrl,
+                  ),
+                );
+              }
+            },
           ),
           IconButton(
-            icon: Icon(Icons.videocam, color: Colors.white),
-            onPressed: () {},
+            icon: const Icon(Icons.videocam, color: Colors.white),
+            onPressed: () async {
+              final callId = await controller.startCall(isVideo: true);
+              if (callId.isNotEmpty) {
+                Get.to(
+                      () => CallScreen(
+                    callId: callId,
+                    isVideo: true,
+                    userName: controller.displayName ?? "User",
+                    userPhotoUrl: controller.photoUrl,
+                  ),
+                );
+              }
+            },
           ),
         ],
       ),

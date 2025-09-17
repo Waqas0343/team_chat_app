@@ -1,5 +1,8 @@
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import '../screens/auth/auth_screen.dart';
+import '../screens/calls/all_calls_list_user_screen.dart';
 import '../screens/calls/call_screen.dart';
 import '../screens/chats/chat_screen.dart';
 import '../screens/groups/create_group_detail_screen.dart';
@@ -42,8 +45,16 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.callsScreen,
-      page: () =>  CallScreen(),
+      page: () {
+        final args = Get.arguments as Map<String, dynamic>? ?? {};
+        return CallScreen(
+          callId: args['callId'] ?? "",
+          isVideo: args['isVideo'] ?? false,
+          userName: args['userName'] ?? "User",
+        );
+      },
     ),
+
     GetPage(
       name: AppRoutes.allAppUser,
       page: () =>  AllAppUser(),
@@ -63,6 +74,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.groupProfileDetailScreen,
       page: () =>  GroupProfileDetailScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.getAllCallsListUsers,
+      page: () =>  AllCallsListUserScreen(),
     ),
   ];
 

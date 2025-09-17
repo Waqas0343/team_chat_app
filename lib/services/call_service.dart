@@ -8,24 +8,30 @@ class CallService {
   RTCPeerConnection? _peerConnection;
   MediaStream? _localStream;
 
-  Future<String> startCall(String receiverId) async {
+  Future<String> startCall(String receiverId, {required bool isVideo}) async {
     if (await Permission.microphone.request().isGranted) {
+      if (isVideo) {
+        await Permission.camera.request();
+      }
+
       final callId = DateTime.now().millisecondsSinceEpoch.toString();
       final configuration = {
         'iceServers': [
           {'urls': 'stun:stun.l.google.com:19302'},
-          // Add TURN server if needed
         ]
       };
+
       _peerConnection = await createPeerConnection(configuration);
 
-      // Get local audio stream
-      _localStream = await navigator.mediaDevices.getUserMedia({'audio': true, 'video': false});
-      _localStream!.getTracks().forEach((track) {
-        _peerConnection!.addTrack(track, _localStream!);
+      // Local stream based on isVideo
+      _localStream = await navigator.mediaDevices.getUserMedia({
+        'audio': true,
+        'video': isVideo,
       });
 
-      // Create offer
+      for (var track in _localStream!.getTracks()) {
+        _peerConnection!.addTrack(track, _localStream!);
+      }
       RTCSessionDescription offer = await _peerConnection!.createOffer();
       await _peerConnection!.setLocalDescription(offer);
       await _firestore.collection('calls').doc(callId).set({
@@ -33,9 +39,9 @@ class CallService {
         'receiverId': receiverId,
         'offer': {'sdp': offer.sdp, 'type': offer.type},
         'status': 'pending',
+        'isVideo': isVideo,
       });
 
-      // Handle ICE candidates
       _peerConnection!.onIceCandidate = (RTCIceCandidate candidate) {
         _firestore.collection('calls').doc(callId).collection('callerCandidates').add({
           'candidate': candidate.candidate,
@@ -48,6 +54,7 @@ class CallService {
     }
     return '';
   }
+
 
   Future<void> joinCall(String callId, Function(MediaStream) onRemoteStream) async {
     if (await Permission.microphone.request().isGranted) {

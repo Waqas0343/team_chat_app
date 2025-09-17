@@ -91,7 +91,7 @@ class HomeController extends GetxController {
     Get.toNamed([
       AppRoutes.homeScreen,
       AppRoutes.getAllGroupChatsScreen,
-      AppRoutes.callsScreen,
+      AppRoutes.getAllCallsListUsers,
       AppRoutes.allAppUser,
     ][index]);
   }

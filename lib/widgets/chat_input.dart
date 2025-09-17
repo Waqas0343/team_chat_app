@@ -35,7 +35,6 @@ class _ChatInputState extends State<ChatInput> {
       color: Colors.white,
       child: Row(
         children: [
-          // Image button
           IconButton(
             icon: Icon(Icons.image, color: Colors.grey[700]),
             onPressed: () async {

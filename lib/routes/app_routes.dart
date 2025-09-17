@@ -11,5 +11,6 @@ class AppRoutes {
   static  String createGroupDetailScreen = '/createGroupDetailScreen';
   static  String groupPersonChatsScreen = '/groupPersonChatsScreen';
   static  String groupProfileDetailScreen = '/groupProfileDetailScreen';
+  static  String getAllCallsListUsers = '/getAllCallsListUsers';
 
 }
